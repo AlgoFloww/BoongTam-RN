@@ -1,30 +1,33 @@
-import { registerRootComponent } from 'expo'
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
-import {
-	useTypography,
-	TypographyProvider,
-} from '../src/utils/TypographyContext'
-import colors from '../src/styles/color'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { registerRootComponent } from 'expo';
+import { StyleSheet } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Colors from "../src/styles/color"
+import { STRINGS } from '../src/config/string';
+
+// 로그인 관련 화면
 import LoginScreen from './login/login/login'
 
-export default function App() {
-	return (
-		<TypographyProvider>
-			<StatusBar style="auto" />
-			<LoginScreen />
-		</TypographyProvider>
-	)
-}
+const Stack = createStackNavigator();
+ 
+export default function App() {  
+  return (
+      <Stack.Navigator initialRouteName="First">
+        <Stack.Screen
+          name="First"
+          component={LoginScreen}
+          options={{ title: STRINGS.LOGIN.TITLE }}
+        /> 
+      </Stack.Navigator>
+  ); 
+}  
 
-registerRootComponent(App)
+registerRootComponent(App);
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.orange200,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-})
+  container: {
+    flex: 1,
+    backgroundColor: Colors.orange200,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

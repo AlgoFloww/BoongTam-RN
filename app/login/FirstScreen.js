@@ -1,35 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { Animated, PanResponder, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native';
 import * as AuthSession from 'expo-auth-session';
-import Colors from '../../../src/styles/color';
-import Typography from '../../../src/styles/typhography';
-import { STRINGS } from '../../../src/config/string';
+import Colors from '../../src/styles/color';
+import Typography from '../../src/styles/typhography';
 
 const kakaoAuthURL = 'https://kauth.kakao.com/oauth/authorize';
 const REST_API_KEY = 'e44a099ba720a8a264e3766146a52572'; // 카카오 REST API 키
 const REDIRECT_URI = AuthSession.makeRedirectUri({ useProxy: true });
 
-const slides = [  
+const slides = [
   {
-    text: STRINGS.LOGIN.SLIDE1.TITLE,
-    description: STRINGS.LOGIN.SLIDE1.DESCRIPTION,
-  },  
-  {
-    text: STRINGS.LOGIN.SLIDE2.TITLE,
-    description: STRINGS.LOGIN.SLIDE2.DESCRIPTION,
+    text: "겨울 간식의 왕,\n붕어빵을 찾아드립니다!",
+    description: "당신이 좋아하는 붕어빵 가게를 한눈에 확인하고\n나만 아는 가게도 등록해보세요.",
   },
-  { 
-    text: STRINGS.LOGIN.SLIDE3.TITLE,
-    description: STRINGS.LOGIN.SLIDE3.DESCRIPTION,
-  },  
   {
-    text: STRINGS.LOGIN.SLIDE4.TITLE,
-    description: STRINGS.LOGIN.SLIDE4.DESCRIPTION,
+    text: "붕어빵 리뷰 평점 확인!\n 지금 바로!",
+    description: "사람들이 작성한 리뷰를 살펴보고\n최고의 붕어빵 가게를 찾아보세요.",
+  },
+  {
+    text: "붕어빵 매장\n 직접 등록하세요!",
+    description: "내가 찾은 정말 맛있는 붕어빵 가게를 등록하고,\n다른 사람들과 공유해보세요.",
+  },
+  {
+    text: "붕어빵 찾기\n지금 시작해볼까요?",
+    description: "로그인하고 주변의 붕어빵 매장을\n한눈에 찾아보세요!",
   },
 ];
-export default function LoginScreen({ navigation }) {
+
+export default function FirstScreen({ navigation }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const translateX = useState(new Animated.Value(0))[0];
+
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (_, gestureState) => {
@@ -62,6 +63,8 @@ export default function LoginScreen({ navigation }) {
       }
     },
   });
+
+ 
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
       clientId: REST_API_KEY,
@@ -72,6 +75,7 @@ export default function LoginScreen({ navigation }) {
       authorizationEndpoint: kakaoAuthURL,
     }
   );
+
   useEffect(() => {
     if (response?.type === 'success') {
       const { code } = response.params;
@@ -82,6 +86,7 @@ export default function LoginScreen({ navigation }) {
       Alert.alert('카카오 로그인 실패', '인증에 실패했습니다.');
     }
   }, [response]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Animated.View
@@ -93,7 +98,7 @@ export default function LoginScreen({ navigation }) {
       >
         {/* 상단 배경 이미지 */}
         <Image
-          source={require('../../../assets/images/background.png')} // 이미지
+          source={require('../../assets/images/background.png')} // 이미지 
           style={styles.backgroundImage}
           resizeMode="cover"
         />
@@ -103,6 +108,7 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.description}>{slides[currentSlide].description}</Text>
         </View>
       </Animated.View>
+
       {/* 네비게이션 점 */}
       <View style={styles.dotsContainer}>
         {slides.map((_, index) => (
@@ -112,6 +118,7 @@ export default function LoginScreen({ navigation }) {
           />
         ))}
       </View>
+
       {/* 로그인 버튼 */}
       <TouchableOpacity
         style={styles.loginButton}
@@ -120,6 +127,7 @@ export default function LoginScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>카카오 로그인</Text>
       </TouchableOpacity>
+
       {/* 다음 버튼 */}
       <TouchableOpacity
         style={styles.nextButton}
@@ -130,6 +138,7 @@ export default function LoginScreen({ navigation }) {
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -201,4 +210,4 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
   ],
-})
+});
